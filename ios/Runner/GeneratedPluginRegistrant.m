@@ -24,6 +24,18 @@
 @import firebase_core;
 #endif
 
+#if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
+#import <path_provider_foundation/PathProviderPlugin.h>
+#else
+@import path_provider_foundation;
+#endif
+
+#if __has_include(<sqflite_darwin/SqflitePlugin.h>)
+#import <sqflite_darwin/SqflitePlugin.h>
+#else
+@import sqflite_darwin;
+#endif
+
 #if __has_include(<webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>)
 #import <webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>
 #else
@@ -36,6 +48,8 @@
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
+  [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
+  [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
 }
 

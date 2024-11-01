@@ -39,7 +39,7 @@ class _BaseLayoutState extends State<BaseLayout> {
       appBar: widget.isAppBar!
           ? CustomAppBar(
               title: Text(widget.text),
-              backgroundColor: AppColors.primaryDark,
+              backgroundColor: AppColors.primary,
             )
           : null,
       drawer: CustomDrawer(),

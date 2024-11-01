@@ -71,7 +71,7 @@ class Themes {
               fontWeight: FontWeight.w500,
             ),
             titleMedium: baseTheme.textTheme.titleMedium!.copyWith(
-              color: AppColors.primaryDark,
+              color: AppColors.primary,
               height: 1.5,
               fontSize: 16,
               fontWeight: FontWeight.w400,
