@@ -47,7 +47,7 @@ class PrimaryButton extends StatelessWidget {
                 disabled ? AppColors.gray : AppColors.primaryDark,
               ],
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
         ),
         onPressed: disabled ? null : onPressed as void Function()?,
