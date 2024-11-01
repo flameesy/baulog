@@ -8,6 +8,7 @@ class CustomDrawer extends StatelessWidget {
     final List sideNav = [
       {'name': 'News', 'path': Routes.news},
       {'name': 'About', 'path': Routes.about},
+      {'name': 'Appointments', 'path': Routes.appointments},
     ];
     return new Drawer(
       child: Container(

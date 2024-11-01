@@ -51,7 +51,7 @@ class ServiceBase {
         dbPath,
         version: 1,
         onOpen: (db) async {
-          await _createTablesIfNotExists(db); // Überprüfe, ob Tabellen existieren, und erstelle sie bei Bedarf
+          //await _createTablesIfNotExists(db); // Überprüfe, ob Tabellen existieren, und erstelle sie bei Bedarf
           await printEmailTemplates(db); // Überprüfe, ob Tabellen existieren, und erstelle sie bei Bedarf
         },
       );

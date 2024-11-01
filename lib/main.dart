@@ -9,7 +9,7 @@ void main() async {
   runZoned(() async {
     WidgetsFlutterBinding.ensureInitialized();
     final databaseService = ServiceBase(); // Access the database
-    await databaseService.insertUser('example@example.com', 'deinPasswort123');
+    //await databaseService.insertUser('e', '123');
     runApp(MyApp());
   });
 }
