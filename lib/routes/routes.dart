@@ -46,6 +46,10 @@ class Routes {
           BaseLayout(page: WebViewScreen(), isAppBar: false),
       about: (BuildContext context) =>
           BaseLayout(page: AboutScreen(), isAppBar: true),
+      appointments: (BuildContext context) =>
+          BaseLayout(page: AppointmentsPage(), isAppBar: true),
+      login: (BuildContext context) =>
+          BaseLayout(page: LoginPage(), isAppBar: true),
     };
   }
 

@@ -5,30 +5,41 @@ import '../../widgets/common/appBar/custom_app_bar.dart';
 import '../../widgets/appointment/selected_day_appointments_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
 
-class AppointmentsPage extends StatelessWidget {
+class AppointmentsPage extends StatefulWidget {
   const AppointmentsPage({Key? key}) : super(key: key);
+
+  @override
+  _AppointmentsPageState createState() => _AppointmentsPageState();
+}
+
+class _AppointmentsPageState extends State<AppointmentsPage> {
+  DateTime selectedDay = DateTime.now(); // Store the selected day
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentBloc, AppointmentsState>(
       builder: (context, state) {
-        DateTime selectedDay = DateTime.now();
         return Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            CustomAppBar(),
-            CalendarCarousel(
-              onDayPressed: (DateTime date, List<dynamic> events) {
-                selectedDay = date;
-                // Lade die Termine für den ausgewählten Tag
-                BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent());
-              },
-              thisMonthDayBorderColor: Colors.grey,
-              selectedDateTime: selectedDay,
-              locale: 'de',
-              customDayBuilder: (bool isSelectable, int index, bool isSelectedDay, bool isToday, bool isPrevMonthDay, TextStyle textStyle, bool isNextMonthDay, bool isThisMonthDay, DateTime day) {
-                final hasAppointments = state.appointmentsByDate.containsKey(day);
-                return _buildCalendarDay(day, textStyle, hasAppointments, isToday, isSelectedDay, state);
-              },
+            Container(
+              height: 400, // Set the height of the calendar
+              child: CalendarCarousel(
+                onDayPressed: (DateTime date, List<dynamic> events) {
+                  setState(() {
+                    selectedDay = date; // Update the selected day
+                  });
+                  // Fetch appointments for the selected day
+                  BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent());
+                },
+                thisMonthDayBorderColor: Colors.grey,
+                selectedDateTime: selectedDay,
+                locale: 'de',
+                customDayBuilder: (bool isSelectable, int index, bool isSelectedDay, bool isToday, bool isPrevMonthDay, TextStyle textStyle, bool isNextMonthDay, bool isThisMonthDay, DateTime day) {
+                  final hasAppointments = state.appointmentsByDate.containsKey(day);
+                  return _buildCalendarDay(day, textStyle, hasAppointments, isToday, isSelectedDay, state);
+                },
+              ),
             ),
             Expanded(
               child: SelectedDayAppointmentsList(
