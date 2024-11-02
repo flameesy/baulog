@@ -11,37 +11,55 @@ class CustomDrawer extends StatelessWidget {
       {'name': 'Appointments', 'path': Routes.appointments},
       {'name': 'Facilities', 'path': Routes.facilities},
     ];
-    return new Drawer(
+    return Drawer(
       child: Container(
         padding: const EdgeInsets.only(top: 10),
         color: AppColors.primary,
-        child: new ListView.builder(
-          itemCount: sideNav.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () => {
-                Navigator.pushNamed(context, sideNav[index]['path']),
-              },
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: new Text(
-                      sideNav[index]['name'],
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium!
-                          .apply(color: AppColors.white),
-                    ),
-                  ),
-                  new Divider(
-                    color: AppColors.primaryLight,
-                  )
-                ],
+        child: Column(
+          children: [
+            // Header with logo
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppColors.primary, // Matches the drawer background color
               ),
-            );
-          },
+              child: Container(
+                width: 100,
+                alignment: Alignment.centerLeft,
+                child: Image.asset('assets/images/logo.png'), // Your logo
+              ),
+            ),
+            // List of navigation items
+            Expanded(
+              child: ListView.builder(
+                itemCount: sideNav.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () => {
+                      Navigator.pushNamed(context, sideNav[index]['path']),
+                    },
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            sideNav[index]['name'],
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .apply(color: AppColors.white),
+                          ),
+                        ),
+                        Divider(
+                          color: AppColors.primaryLight,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

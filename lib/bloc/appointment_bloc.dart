@@ -18,6 +18,22 @@ class AppointmentsState {
   AppointmentsState({this.appointments = const [], this.appointmentsByDate = const {}});
 }
 
+class AppointmentsInitial extends AppointmentsState {}
+
+class AppointmentsLoading extends AppointmentsState {}
+
+class AppointmentsLoaded extends AppointmentsState {
+  final Map<DateTime, List<Appointment>> appointmentsByDate;
+
+  AppointmentsLoaded(this.appointmentsByDate);
+}
+
+class AppointmentsError extends AppointmentsState {
+  final String message;
+
+  AppointmentsError(this.message);
+}
+
 class AppointmentBloc extends Bloc<AppointmentEvent, AppointmentsState> {
   final AppointmentService _appointmentService;
 

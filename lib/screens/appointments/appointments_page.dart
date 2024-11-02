@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/appointment_bloc.dart';
 import '../../core/models/appointment_model.dart';
-import '../../widgets/common/appBar/custom_app_bar.dart';
 import '../../widgets/appointment/selected_day_appointments_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
 

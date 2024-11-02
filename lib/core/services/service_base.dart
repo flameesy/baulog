@@ -24,7 +24,7 @@ class ServiceBase {
     // Überprüfen, ob die Datenbank bereits existiert
     var dbExists = await databaseExists(dbPath);
 
-    if (!dbExists) {
+    if (1==1) {
       // Wenn die Datenbank nicht existiert, erstelle sie
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
       String path = join(documentsDirectory.path, "baulog.db");
