@@ -28,4 +28,5 @@ class Appointment {
       description: map['description'],
     );
   }
+
 }

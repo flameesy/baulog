@@ -4,7 +4,12 @@ import '../core/services/appointment_service.dart';
 
 class AppointmentEvent {}
 
-class FetchAppointmentsEvent extends AppointmentEvent {}
+class FetchAppointmentsEvent extends AppointmentEvent {
+  final DateTime selectedDate;
+
+  FetchAppointmentsEvent({required this.selectedDate});
+}
+
 
 class AppointmentsState {
   final List<Appointment> appointments;

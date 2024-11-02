@@ -1,4 +1,5 @@
 import 'package:baulog/screens/appointments/appointments_page.dart';
+import 'package:baulog/screens/facility/facility_management_page.dart';
 import 'package:baulog/screens/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:baulog/layout/base.dart';
@@ -32,6 +33,7 @@ class Routes {
   static const webViewScreen = '/webview';
   static const about = '/about';
   static const appointments = '/appointments';
+  static const facilities = '/facilities';
 
   /// Routing Table needed for the App.
   static Map<String, WidgetBuilder> get buildRoutes {
@@ -50,6 +52,8 @@ class Routes {
           BaseLayout(page: AppointmentsPage(), isAppBar: true),
       login: (BuildContext context) =>
           BaseLayout(page: LoginPage(), isAppBar: true),
+      facilities: (BuildContext context) =>
+          BaseLayout(page: FacilityManagementPage(), isAppBar: true),
     };
   }
 

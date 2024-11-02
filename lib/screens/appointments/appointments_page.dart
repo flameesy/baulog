@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/appointment_bloc.dart';
+import '../../core/models/appointment_model.dart';
 import '../../widgets/common/appBar/custom_app_bar.dart';
 import '../../widgets/appointment/selected_day_appointments_list.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
@@ -16,6 +17,13 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   DateTime selectedDay = DateTime.now(); // Store the selected day
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch initial appointments for the default selected day
+    context.read<AppointmentBloc>().add(FetchAppointmentsEvent(selectedDate: selectedDay));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentBloc, AppointmentsState>(
       builder: (context, state) {
@@ -29,8 +37,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                   setState(() {
                     selectedDay = date; // Update the selected day
                   });
-                  // Fetch appointments for the selected day
-                  BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent());
+                  // Use a new method to handle the fetching of appointments
+                  _fetchAppointments(date);
                 },
                 thisMonthDayBorderColor: Colors.grey,
                 selectedDateTime: selectedDay,
@@ -43,13 +51,19 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             ),
             Expanded(
               child: SelectedDayAppointmentsList(
-                appointments: (state.appointmentsByDate[selectedDay] as List<dynamic>?)?.map((e) => e as Map<String, dynamic>).toList() ?? [],
+                appointments: (state.appointmentsByDate[selectedDay] as List<Appointment>?) ?? [],
+                selectedDate: selectedDay,
               ),
             ),
           ],
         );
       },
     );
+  }
+
+  void _fetchAppointments(DateTime date) {
+    // Here you can directly invoke the event handling logic without using add
+    BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent(selectedDate: date));
   }
 
   Widget _buildCalendarDay(DateTime day, TextStyle textStyle, bool hasAppointments, bool isToday, bool isSelectedDay, AppointmentsState state) {

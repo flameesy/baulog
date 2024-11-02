@@ -9,6 +9,7 @@ class CustomDrawer extends StatelessWidget {
       {'name': 'News', 'path': Routes.news},
       {'name': 'About', 'path': Routes.about},
       {'name': 'Appointments', 'path': Routes.appointments},
+      {'name': 'Facilities', 'path': Routes.facilities},
     ];
     return new Drawer(
       child: Container(

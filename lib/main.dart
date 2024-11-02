@@ -2,31 +2,36 @@ import 'dart:async' show runZoned;
 import 'package:flutter/material.dart';
 import 'package:baulog/app.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart'; // Import Provider package
-import 'package:flutter_bloc/flutter_bloc.dart'; // Import Bloc package
+import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/service_base.dart';
-import 'core/services/appointment_service.dart'; // Import your AppointmentService
-import 'bloc/appointment_bloc.dart'; // Adjust the import according to your file structure
+import 'core/services/appointment_service.dart';
+import 'bloc/appointment_bloc.dart';
+import 'core/services/facility_service.dart'; // Import FacilityService
+import 'bloc/facility_bloc.dart'; // Import FacilityBloc
 
 void main() async {
   runZoned(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final databaseService = ServiceBase(); // Access the database
+    final databaseService = ServiceBase();
 
     // Initialize Firebase if needed
-    //await Firebase.initializeApp();
-
-    // Create an instance of AppointmentService
+    // await Firebase.initializeApp();
+    await databaseService.insertUser('de', 'pw');
+    // Create instances of services
     final appointmentService = AppointmentService();
+    final facilityService = FacilityService(); // Initialize with database connection
 
-    // Wrap MyApp with MultiProvider to provide the AppointmentBloc
     runApp(
       MultiProvider(
         providers: [
           BlocProvider<AppointmentBloc>(
-            create: (context) => AppointmentBloc(appointmentService), // Pass the appointmentService here
+            create: (context) => AppointmentBloc(appointmentService),
           ),
-          // Add other providers here if needed
+          BlocProvider<FacilityBloc>(
+            create: (context) => FacilityBloc(facilityService), // Add FacilityBloc here
+          ),
+          // Weitere Providers falls nötig
         ],
         child: MyApp(),
       ),

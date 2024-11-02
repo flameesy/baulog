@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/appointment_bloc.dart';
+import '../../core/models/appointment_model.dart';
 import '../../screens/appointments/appointment_detail.dart';
 
 class SelectedDayAppointmentsList extends StatefulWidget {
-  final List<Map<String, dynamic>> appointments;
+  final List<Appointment> appointments; // Change to List<Appointment>
+  final DateTime selectedDate;
 
   const SelectedDayAppointmentsList({
     Key? key,
     required this.appointments,
+    required this.selectedDate,
   }) : super(key: key);
 
   @override
@@ -35,7 +38,7 @@ class _SelectedDayAppointmentsListState extends State<SelectedDayAppointmentsLis
             onTap: () async {
               final result = await navigateToNewAppointmentDetailPage(context, const {});
               if (result != null) {
-                BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent()); // Trigger an event to fetch appointments
+                BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent(selectedDate: widget.selectedDate)); // Trigger an event to fetch appointments
               }
             },
           );
@@ -49,7 +52,7 @@ class _SelectedDayAppointmentsListState extends State<SelectedDayAppointmentsLis
             ),
             child: ListTile(
               title: Text(
-                appointment['text'] ?? 'Kein Text verfügbar',
+                appointment.text, // Directly use the property
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               subtitle: Column(
@@ -57,22 +60,22 @@ class _SelectedDayAppointmentsListState extends State<SelectedDayAppointmentsLis
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    'Startzeit: ${appointment['start_time'] != null ? formatTime(appointment['start_time']) : 'Keine Startzeit verfügbar'} | Endzeit: ${appointment['end_time'] != null ? formatTime(appointment['end_time']) : 'Keine Endzeit verfügbar'}',
+                    'Startzeit: ${appointment.startTime.isNotEmpty ? formatTime(appointment.startTime) : 'Keine Startzeit verfügbar'} | Endzeit: ${appointment.endTime.isNotEmpty ? formatTime(appointment.endTime) : 'Keine Endzeit verfügbar'}',
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Beschreibung: ${appointment['description'] ?? 'Keine Beschreibung verfügbar'}',
+                    'Beschreibung: ${appointment.description.isNotEmpty ? appointment.description : 'Keine Beschreibung verfügbar'}',
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Datum: ${_formatDate(appointment['appointment_date']) ?? 'Kein Datum verfügbar'}',
+                    'Datum: ${_formatDate(appointment.appointmentDate) ?? 'Kein Datum verfügbar'}',
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Raum ID: ${appointment['room_id'] ?? 'Keine Raum ID verfügbar'}',
+                    'Raum ID: ${appointment.roomId ?? 'Keine Raum ID verfügbar'}',
                     style: const TextStyle(fontSize: 14),
                   ),
                 ],
@@ -80,7 +83,7 @@ class _SelectedDayAppointmentsListState extends State<SelectedDayAppointmentsLis
               onTap: () async {
                 final result = await navigateToAppointmentDetailPage(context, appointment);
                 if (result != null) {
-                  BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent()); // Trigger an event to fetch appointments
+                  BlocProvider.of<AppointmentBloc>(context).add(FetchAppointmentsEvent(selectedDate: widget.selectedDate)); // Trigger an event to fetch appointments
                 }
               },
             ),
@@ -99,55 +102,36 @@ class _SelectedDayAppointmentsListState extends State<SelectedDayAppointmentsLis
     );
   }
 
-  Future<dynamic> navigateToAppointmentDetailPage(BuildContext context, Map<String, dynamic> appointment) {
+  Future<dynamic> navigateToAppointmentDetailPage(BuildContext context, Appointment appointment) { // Change to Appointment
     return Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AppointmentDetailPage(appointmentId: appointment['id']),
+        builder: (context) => AppointmentDetailPage(appointmentId: appointment.id), // Pass the id from Appointment
       ),
     );
   }
 }
 
-String formatTime(dynamic time) {
-  if (time == null) {
+String formatTime(String time) {
+  if (time.isEmpty) {
     return 'Keine Zeit verfügbar';
   }
 
-  if (time is DateTime) {
-    return DateFormat('HH:mm').format(time);
-  } else if (time is String) {
-    List<String> timeParts = time.split(':');
-    if (timeParts.length < 2) {
-      return 'Ungültige Zeit';
-    }
-
-    int? hours = int.tryParse(timeParts[0]);
-    int? minutes = int.tryParse(timeParts[1]);
-
-    if (hours == null || minutes == null) {
-      return time;
-    }
-
-    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+  List<String> timeParts = time.split(':');
+  if (timeParts.length < 2) {
+    return 'Ungültige Zeit';
   }
 
-  return 'Ungültiges Format';
+  int? hours = int.tryParse(timeParts[0]);
+  int? minutes = int.tryParse(timeParts[1]);
+
+  if (hours == null || minutes == null) {
+    return time;
+  }
+
+  return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
 }
 
-String _formatDate(dynamic date) {
-  if (date == null) {
-    return DateFormat('dd.MM.yyyy').format(DateTime.now());
-  } else if (date is String) {
-    try {
-      final parsedDate = DateTime.parse(date);
-      return DateFormat('dd.MM.yyyy').format(parsedDate);
-    } catch (e) {
-      return DateFormat('dd.MM.yyyy').format(DateTime.now());
-    }
-  } else if (date is DateTime) {
-    return DateFormat('dd.MM.yyyy').format(date);
-  } else {
-    return DateFormat('dd.MM.yyyy').format(DateTime.now());
-  }
+String _formatDate(DateTime date) {
+  return DateFormat('dd.MM.yyyy').format(date);
 }
